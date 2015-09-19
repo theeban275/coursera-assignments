@@ -1,14 +1,11 @@
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionunionFind;
-
-import java.lang.IndexOutOfBoundsException;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.lang.IllegalArgumentException;
+import java.lang.IndexOutOfBoundsException;
 
 public class Percolation {
 
     private int num;
-    private WeightedQuickUnionunionFind unionFind;
+    private WeightedQuickUnionUF unionFind;
     private int topSite;
     private int bottomSite;
     private boolean[] sitesOpen;
@@ -19,16 +16,16 @@ public class Percolation {
         }
 
         num = N;
-        unionFind = new WeightedQuickUnionunionFind(N * N + 2);
-        topSite = N*N;
-        bottomSite = topSite+1;
+        unionFind = new WeightedQuickUnionUF(N * N + 2);
+        topSite = N * N;
+        bottomSite = topSite + 1;
 
         for (int i = 0; i < N; i++) {
             unionFind.union(site(0, i), topSite);
-            unionFind.union(site(N-1, i), bottomSite);
+            unionFind.union(site(N - 1, i), bottomSite);
         }
 
-        sitesOpen = new boolean[N*N];
+        sitesOpen = new boolean[N * N];
     }
 
     public void open(int i, int j) {
@@ -36,16 +33,16 @@ public class Percolation {
             return ;
         }
 
-        if (isBlocked(i - 1, j)) {
+        if (isOpenNoException(i - 1, j)) {
             unionFind.union(site(i - 1, j), site(i, j));
         }
-        if (isBlocked(i + 1, j)) {
+        if (isOpenNoException(i + 1, j)) {
             unionFind.union(site(i + 1, j), site(i, j));
         }
-        if (isBlocked(i, j - 1)) {
+        if (isOpenNoException(i, j - 1)) {
             unionFind.union(site(i, j - 1), site(i, j));
         }
-        if (isBlocked(i, j + 1)) {
+        if (isOpenNoException(i, j + 1)) {
             unionFind.union(site(i, j + 1), site(i, j));
         }
 
@@ -68,8 +65,8 @@ public class Percolation {
         return unionFind.connected(topSite, bottomSite);
     }
 
-    private boolean isBlocked(int i, int j) {
-         return isWithinBounds(i, j) && isFull(i, j);
+    private boolean isOpenNoException(int i, int j) {
+         return isWithinBounds(i, j) && isOpen(i, j);
     }
 
     private boolean isWithinBounds(int i, int j) {
