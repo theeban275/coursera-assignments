@@ -3,9 +3,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     private int num;
-    private WeightedQuickUnionUF unionFind;
+
+    private WeightedQuickUnionUF fullFind;
+    private WeightedQuickUnionUF percolatesFind;
+
     private int topSite;
     private int bottomSite;
+
     private boolean[] sitesOpen;
 
     public Percolation(int N) {
@@ -14,13 +18,17 @@ public class Percolation {
         }
 
         num = N;
-        unionFind = new WeightedQuickUnionUF(N * N + 2);
+
+        fullFind = new WeightedQuickUnionUF(N * N + 2);
+        percolatesFind = new WeightedQuickUnionUF(N * N + 2);
+
         topSite = N * N;
         bottomSite = topSite + 1;
 
         for (int i = 0; i < N; i++) {
-            unionFind.union(site(1, i + 1), topSite);
-            unionFind.union(site(N, i + 1), bottomSite);
+            fullFind.union(site(1, i + 1), topSite);
+            percolatesFind.union(site(1, i + 1), topSite);
+            percolatesFind.union(site(N, i + 1), bottomSite);
         }
 
         sitesOpen = new boolean[N * N];
@@ -32,16 +40,20 @@ public class Percolation {
         }
 
         if (canUnion(i - 1, j)) {
-            unionFind.union(site(i - 1, j), site(i, j));
+            fullFind.union(site(i - 1, j), site(i, j));
+            percolatesFind.union(site(i - 1, j), site(i, j));
         }
         if (canUnion(i + 1, j)) {
-            unionFind.union(site(i + 1, j), site(i, j));
+            fullFind.union(site(i + 1, j), site(i, j));
+            percolatesFind.union(site(i + 1, j), site(i, j));
         }
         if (canUnion(i, j - 1)) {
-            unionFind.union(site(i, j - 1), site(i, j));
+            fullFind.union(site(i, j - 1), site(i, j));
+            percolatesFind.union(site(i, j - 1), site(i, j));
         }
         if (canUnion(i, j + 1)) {
-            unionFind.union(site(i, j + 1), site(i, j));
+            fullFind.union(site(i, j + 1), site(i, j));
+            percolatesFind.union(site(i, j + 1), site(i, j));
         }
 
         sitesOpen[site(i, j)] = true;
@@ -57,13 +69,13 @@ public class Percolation {
 
     public boolean isFull(int i, int j) {
         if (isOpen(i, j)) {
-            return unionFind.connected(topSite, site(i, j));
+            return fullFind.connected(topSite, site(i, j));
         }
         return false;
     }
 
     public boolean percolates() {
-        return unionFind.connected(topSite, bottomSite);
+        return percolatesFind.connected(topSite, bottomSite);
     }
 
     private boolean canUnion(int i, int j) {
