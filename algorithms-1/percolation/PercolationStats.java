@@ -45,14 +45,14 @@ public class PercolationStats {
         int size = N * N;
         int[] indexes = shuffledIndexes(size);
         for (int i = 0; i < size; i++) {
+            count++;
             int random_index = indexes[i];
             int row = random_index / N;
             int col = random_index - row * N;
-            percolation.open(row, col);
+            percolation.open(row + 1, col + 1);
             if (percolation.percolates()) {
                 break;
             }
-            count++;
         }
         return count / (double) size;
     }

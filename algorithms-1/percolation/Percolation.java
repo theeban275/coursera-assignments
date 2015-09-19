@@ -19,8 +19,8 @@ public class Percolation {
         bottomSite = topSite + 1;
 
         for (int i = 0; i < N; i++) {
-            unionFind.union(site(0, i), topSite);
-            unionFind.union(site(N - 1, i), bottomSite);
+            unionFind.union(site(1, i + 1), topSite);
+            unionFind.union(site(N, i + 1), bottomSite);
         }
 
         sitesOpen = new boolean[N * N];
@@ -31,16 +31,16 @@ public class Percolation {
             return;
         }
 
-        if (isOpenNoException(i - 1, j)) {
+        if (canUnion(i - 1, j)) {
             unionFind.union(site(i - 1, j), site(i, j));
         }
-        if (isOpenNoException(i + 1, j)) {
+        if (canUnion(i + 1, j)) {
             unionFind.union(site(i + 1, j), site(i, j));
         }
-        if (isOpenNoException(i, j - 1)) {
+        if (canUnion(i, j - 1)) {
             unionFind.union(site(i, j - 1), site(i, j));
         }
-        if (isOpenNoException(i, j + 1)) {
+        if (canUnion(i, j + 1)) {
             unionFind.union(site(i, j + 1), site(i, j));
         }
 
@@ -63,16 +63,16 @@ public class Percolation {
         return unionFind.connected(topSite, bottomSite);
     }
 
-    private boolean isOpenNoException(int i, int j) {
+    private boolean canUnion(int i, int j) {
          return isWithinBounds(i, j) && isOpen(i, j);
     }
 
     private boolean isWithinBounds(int i, int j) {
-        return (i >= 0 && i < num) && (j >= 0 && j < num);
+        return (i >= 1 && i <= num) && (j >= 1 && j <= num);
     }
 
     private int site(int i, int j) {
-         return i * num + j;
+         return (i - 1) * num + (j - 1);
     }
 
     public static void main(String[] args) {
