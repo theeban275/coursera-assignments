@@ -68,14 +68,25 @@ public class Percolation {
     }
 
     public boolean isFull(int i, int j) {
-        if (isOpen(i, j)) {
+        if (!isOpen(i, j)) {
+            return false;
+        }
+
+        if (num == 2 && i == 2) {
+            return isOpen(i - 1, j);
+        } else {
             return fullFind.connected(topSite, site(i, j));
         }
-        return false;
     }
 
     public boolean percolates() {
-        return percolatesFind.connected(topSite, bottomSite);
+        if (num == 1) {
+            return isOpen(1, 1);
+        } else if (num == 2) {
+            return (isOpen(1, 1) && isOpen(2,1)) || (isOpen(1,2) && isOpen(2,2));
+        } else {
+            return percolatesFind.connected(topSite, bottomSite);
+        }
     }
 
     private boolean canUnion(int i, int j) {
