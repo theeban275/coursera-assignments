@@ -1,6 +1,4 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import java.lang.IllegalArgumentException;
-import java.lang.IndexOutOfBoundsException;
 
 public class Percolation {
 
@@ -30,7 +28,7 @@ public class Percolation {
 
     public void open(int i, int j) {
         if (isOpen(i, j)) {
-            return ;
+            return;
         }
 
         if (isOpenNoException(i - 1, j)) {

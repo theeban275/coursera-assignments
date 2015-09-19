@@ -1,14 +1,12 @@
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import java.lang.IllegalArgumentException;
-import java.lang.IndexOutOfBoundsException;
 
 public class PercolationStats {
 
     private static final double INTERVAL_VALUE = 1.96;
 
-    private double thresholds[];
+    private double[] thresholds;
 
     public PercolationStats(int N, int T) {
         if (N <= 0 || T <= 0) {
@@ -45,7 +43,7 @@ public class PercolationStats {
         Percolation percolation = new Percolation(N);
         int count = 0;
         int size = N * N;
-        int[] indexes = shuffled_indexes(size);
+        int[] indexes = shuffledIndexes(size);
         for (int i = 0; i < size; i++) {
             int random_index = indexes[i];
             int row = random_index / N;
@@ -59,7 +57,7 @@ public class PercolationStats {
         return count / (double) size;
     }
 
-    private int[] shuffled_indexes(int size) {
+    private int[] shuffledIndexes(int size) {
         int[] indexes = new int[size];
         for (int i = 0; i < size; i++) {
             indexes[i] = i;
@@ -74,7 +72,8 @@ public class PercolationStats {
         PercolationStats stats = new PercolationStats(N, T);
         StdOut.printf("mean                    = %f\n", stats.mean());
         StdOut.printf("stddev                  = %f\n", stats.stddev());
-        StdOut.printf("95%% confidence interval = %f, %f\n", stats.confidenceLo(), stats.confidenceHi());
+        StdOut.printf("95%% confidence interval = %f, %f\n",
+                stats.confidenceLo(), stats.confidenceHi());
     }
 
 }
