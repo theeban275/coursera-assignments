@@ -56,7 +56,10 @@ public class Percolation {
     }
 
     public boolean isFull(int i, int j) {
-        return !isOpen(i, j);
+        if (isOpen(i, j)) {
+            return unionFind.connected(topSite, site(i, j));
+        }
+        return false;
     }
 
     public boolean percolates() {
@@ -73,10 +76,6 @@ public class Percolation {
 
     private int site(int i, int j) {
          return (i - 1) * num + (j - 1);
-    }
-
-    public static void main(String[] args) {
-
     }
 
 }

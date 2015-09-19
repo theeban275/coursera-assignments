@@ -13,9 +13,15 @@ public class PercolationStats {
             throw new IllegalArgumentException();
         }
 
+        int[] indexes = new int[N * N];
+        for (int i = 0; i < indexes.length; i++) {
+            indexes[i] = i;
+        }
+
         thresholds = new double[T];
-        for (int i = 0; i < T; i++) {
-            thresholds[i] = computeThreshold(N);
+        for (int i = 0; i < thresholds.length; i++) {
+            StdRandom.shuffle(indexes);
+            thresholds[i] = computeThreshold(indexes, N);
         }
     }
 
@@ -39,11 +45,10 @@ public class PercolationStats {
         return INTERVAL_VALUE * stddev() / Math.sqrt(thresholds.length);
     }
 
-    private double computeThreshold(int N) {
+    private double computeThreshold(int[] indexes, int N) {
         Percolation percolation = new Percolation(N);
         int count = 0;
         int size = N * N;
-        int[] indexes = shuffledIndexes(size);
         for (int i = 0; i < size; i++) {
             count++;
             int random_index = indexes[i];
@@ -55,15 +60,6 @@ public class PercolationStats {
             }
         }
         return count / (double) size;
-    }
-
-    private int[] shuffledIndexes(int size) {
-        int[] indexes = new int[size];
-        for (int i = 0; i < size; i++) {
-            indexes[i] = i;
-        }
-        StdRandom.shuffle(indexes);
-        return indexes;
     }
 
     public static void main(String[] args) {
