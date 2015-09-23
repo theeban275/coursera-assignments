@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="DequeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2015-09-22T10:25:25" hostname="dev" time="0.005">
+<testsuite name="DequeTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2015-09-23T10:41:15" hostname="dev" time="0.009">
   <properties/>
-  <testcase name="testIsEmptyReturnsTrue" classname="DequeTest" time="0.005"/>
+  <testcase name="testAddFirstAfterAddLast" classname="DequeTest" time="0.002"/>
+  <testcase name="testAddLastRaisesExceptionForNullItem" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddLastAddsItemsToEndOfQueue" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstRaisesExceptionForNullItem" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddLastAfterAddFirst" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddLastOnEmptyQueue" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstOnEmptyQueue" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstAddsItemsToFrontOfQueue" classname="DequeTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
