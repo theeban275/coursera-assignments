@@ -55,6 +55,14 @@ public class Deque<Item> implements Iterable<Item> {
         size++;
     }
 
+    public boolean isEmpty() {
+         return size == 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
     public Item[] toArray() {
         @SuppressWarnings("unchecked")
         Item[] items = (Item[]) new Object[size];

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="DequeTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2015-09-23T10:41:15" hostname="dev" time="0.009">
+<testsuite name="DequeTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2015-09-26T03:03:33" hostname="dev" time="0.012">
   <properties/>
-  <testcase name="testAddFirstAfterAddLast" classname="DequeTest" time="0.002"/>
-  <testcase name="testAddLastRaisesExceptionForNullItem" classname="DequeTest" time="0.001"/>
-  <testcase name="testAddLastAddsItemsToEndOfQueue" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstAfterAddLast" classname="DequeTest" time="0.001"/>
+  <testcase name="testSize" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddLastRaisesExceptionForNullItem" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddLastAddsItemsToEndOfQueue" classname="DequeTest" time="0.0"/>
   <testcase name="testAddFirstRaisesExceptionForNullItem" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddLastAfterAddFirst" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddLastAfterAddFirst" classname="DequeTest" time="0.001"/>
   <testcase name="testAddLastOnEmptyQueue" classname="DequeTest" time="0.001"/>
-  <testcase name="testAddFirstOnEmptyQueue" classname="DequeTest" time="0.001"/>
-  <testcase name="testAddFirstAddsItemsToFrontOfQueue" classname="DequeTest" time="0.0"/>
+  <testcase name="testIsEmptyIsFalse" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddFirstOnEmptyQueue" classname="DequeTest" time="0.0"/>
+  <testcase name="testIsEmptyIsTrue" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddFirstAddsItemsToFrontOfQueue" classname="DequeTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,25 @@ public class DequeTest {
          deque.addLast("one");
          deque.addFirst("two");
          assertTrue(Arrays.equals(deque.toArray(), new String[] { "two", "one" }));
+    }
+
+    @Test
+    public void testIsEmptyIsTrue() {
+         assertTrue(deque.isEmpty());
+    }
+
+    @Test
+    public void testIsEmptyIsFalse() {
+        deque.addFirst("one");
+        assertFalse(deque.isEmpty());
+    }
+
+    @Test
+    public void testSize() {
+         deque.addFirst("one");
+         deque.addLast("two");
+         deque.addFirst("three");
+         assertEquals(deque.size(), 3);
     }
 
 }
