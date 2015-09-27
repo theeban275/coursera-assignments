@@ -34,6 +34,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         public void remove() {
             throw new UnsupportedOperationException();
         }
+
     }
 
     private Node first;
@@ -119,6 +120,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             randomSize /= 2;
         } else if (size >= randomSize) {
             randomSize *= 2;
+        } else {
+            return;
         }
 
         Item[] items = toArray();
