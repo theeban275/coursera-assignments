@@ -36,14 +36,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private Item[] items;
     private int size;
-    private int bufferSize;
 
     private static final int BUFFER_SIZE = 2;
 
     @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         items = (Item[]) new Object[BUFFER_SIZE];
-        bufferSize = BUFFER_SIZE;
         size = 0;
     }
 
@@ -69,8 +67,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
              throw new NoSuchElementException();
         }
 
+        resize();
         randomize();
-        return items[--size];
+        Item item = items[--size];
+        items[size] = null;
+        return item;
     }
 
     private void randomize() {
@@ -96,19 +97,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomizedIterator();
     }
 
-    public Item[] toArray() {
+    private Item[] toArray() {
         return Arrays.copyOf(items, size);
     }
 
     private void resize() {
-        if (size <= bufferSize / 4) {
-            bufferSize /= 2;
-        } else if (size >= bufferSize) {
-            bufferSize *= 2;
-        } else {
-            return;
+        if (size < items.length / 4) {
+            items = Arrays.copyOf(items, items.length / 2);
+        } else if (size >= items.length) {
+            items = Arrays.copyOf(items, items.length * 2);
         }
-
-        items = Arrays.copyOf(items, bufferSize);
     }
 }

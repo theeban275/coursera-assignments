@@ -136,7 +136,7 @@ public class Deque<Item> implements Iterable<Item> {
         return size;
     }
 
-    public Item[] toArray() {
+    private Item[] toArray() {
         @SuppressWarnings("unchecked")
         Item[] items = (Item[]) new Object[size];
         Node n = first;
