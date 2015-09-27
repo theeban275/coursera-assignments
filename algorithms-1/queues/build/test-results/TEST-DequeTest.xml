@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="DequeTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2015-09-26T03:03:33" hostname="dev" time="0.012">
+<testsuite name="DequeTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2015-09-27T00:48:21" hostname="dev" time="0.043">
   <properties/>
-  <testcase name="testAddFirstAfterAddLast" classname="DequeTest" time="0.001"/>
+  <testcase name="testSizeAfterRemovingLast" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstNullItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testSizeAfterRemovingFirst" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddLast" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddLastOrder" classname="DequeTest" time="0.0"/>
+  <testcase name="testIteratorRemove" classname="DequeTest" time="0.002"/>
   <testcase name="testSize" classname="DequeTest" time="0.001"/>
-  <testcase name="testAddLastRaisesExceptionForNullItem" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddLastAddsItemsToEndOfQueue" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddFirstRaisesExceptionForNullItem" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddLastAfterAddFirst" classname="DequeTest" time="0.001"/>
-  <testcase name="testAddLastOnEmptyQueue" classname="DequeTest" time="0.001"/>
-  <testcase name="testIsEmptyIsFalse" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddFirstOnEmptyQueue" classname="DequeTest" time="0.0"/>
-  <testcase name="testIsEmptyIsTrue" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddFirstAddsItemsToFrontOfQueue" classname="DequeTest" time="0.001"/>
+  <testcase name="testIteratorNextWithNoItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testRemoveFirst" classname="DequeTest" time="0.003"/>
+  <testcase name="testAddFirst" classname="DequeTest" time="0.0"/>
+  <testcase name="testRemoveFirstWithNoItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testRemoveLastWithNoItems" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddLastAndAddFirst" classname="DequeTest" time="0.0"/>
+  <testcase name="testMixingAddAndRemove" classname="DequeTest" time="0.001"/>
+  <testcase name="testIsEmptyWithItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testRemoveLast" classname="DequeTest" time="0.002"/>
+  <testcase name="lastAddLastNullItems" classname="DequeTest" time="0.001"/>
+  <testcase name="testIsEmpty" classname="DequeTest" time="0.0"/>
+  <testcase name="testAddFirstOrder" classname="DequeTest" time="0.0"/>
+  <testcase name="testIterator" classname="DequeTest" time="0.002"/>
+  <testcase name="testAddFirstAndAddLast" classname="DequeTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
