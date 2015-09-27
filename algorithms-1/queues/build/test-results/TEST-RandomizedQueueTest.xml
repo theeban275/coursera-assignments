@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RandomizedQueueTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2015-09-27T02:13:45" hostname="dev" time="0.018">
+  <properties/>
+  <testcase name="testEnqueue" classname="RandomizedQueueTest" time="0.004"/>
+  <testcase name="testIteratorWithNoItems" classname="RandomizedQueueTest" time="0.001"/>
+  <testcase name="testIteratorRemove" classname="RandomizedQueueTest" time="0.001"/>
+  <testcase name="testSizeWithNoItems" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testSize" classname="RandomizedQueueTest" time="0.003"/>
+  <testcase name="testSampleWithNoItems" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testIsEmptyWithItems" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testDequeueWithNoItems" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testSizeAfterDequeue" classname="RandomizedQueueTest" time="0.001"/>
+  <testcase name="testEnqueueNullItems" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testDequeue" classname="RandomizedQueueTest" time="0.0"/>
+  <testcase name="testIsEmpty" classname="RandomizedQueueTest" time="0.001"/>
+  <testcase name="testSample" classname="RandomizedQueueTest" time="0.001"/>
+  <testcase name="testIterator" classname="RandomizedQueueTest" time="0.001"/>
+  <system-out><![CDATA[[Ljava.lang.Object;@5dfaa827
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
