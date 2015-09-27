@@ -1,34 +1,31 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Arrays;
 
 import edu.princeton.cs.algs4.StdRandom;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private class Node {
-        Item item;
-        Node next;
-    }
-
     private class RandomizedIterator implements Iterator<Item> {
 
-        private Item[] items;
+        private Item[] is;
         private int index;
 
         public RandomizedIterator() {
-            items = toArray();
+            is = Arrays.copyOf(items, size);
+            StdRandom.shuffle(is);
             index = 0;
         }
 
         public boolean hasNext() {
-            return index < items.length;
+            return index < is.length;
         }
 
         public Item next() {
-            if (index == items.length) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return items[index++];
+            return is[index++];
         }
 
         public void remove() {
@@ -37,15 +34,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     }
 
-    private Node first;
+    private Item[] items;
     private int size;
-    private int randomSize;
+    private int bufferSize;
 
-    private static final int RANDOM_SIZE = 2;
+    private static final int BUFFER_SIZE = 2;
 
+    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
+        items = (Item[]) new Object[BUFFER_SIZE];
+        bufferSize = BUFFER_SIZE;
         size = 0;
-        randomSize = RANDOM_SIZE;
     }
 
     public boolean isEmpty() {
@@ -61,43 +60,36 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NullPointerException();
         }
 
-        if (first == null) {
-            first = new Node();
-            first.item = item;
-        } else {
-            Node oldFirst = first;
-            first = new Node();
-            first.item = item;
-            first.next = oldFirst;
-        }
-
-        size++;
-
-        randomize();
+        resize();
+        items[size++] = item;
     }
 
     public Item dequeue() {
-        if (first == null) {
+        if (isEmpty()) {
              throw new NoSuchElementException();
         }
 
-        Node oldFirst = first;
-        first = oldFirst.next;
-        oldFirst.next = null;
-
-        size--;
-
         randomize();
+        return items[--size];
+    }
 
-        return oldFirst.item;
+    private void randomize() {
+        swap(StdRandom.uniform(size), size - 1);
+    }
+
+    private void swap(int i, int j) {
+        Item temp = items[i];
+        items[i] = items[j];
+        items[j] = temp;
     }
 
     public Item sample() {
-        if (first == null) {
+        if (isEmpty()) {
              throw new NoSuchElementException();
         }
 
-        return first.item;
+        randomize();
+        return items[size - 1];
     }
 
     public Iterator<Item> iterator() {
@@ -105,31 +97,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public Item[] toArray() {
-        @SuppressWarnings("unchecked")
-        Item[] items = (Item[]) new Object[size];
-        Node node = first;
-        for (int i = 0; i < items.length; i++) {
-            items[i] = node.item;
-            node = node.next;
-        }
-        return items;
+        return Arrays.copyOf(items, size);
     }
 
-    private void randomize() {
-        if (size <= randomSize / 4) {
-            randomSize /= 2;
-        } else if (size >= randomSize) {
-            randomSize *= 2;
+    private void resize() {
+        if (size <= bufferSize / 4) {
+            bufferSize /= 2;
+        } else if (size >= bufferSize) {
+            bufferSize *= 2;
         } else {
             return;
         }
 
-        Item[] items = toArray();
-        StdRandom.shuffle(items);
-        Node node = first;
-        for (int i = 0; i < items.length; i++) {
-            node.item = items[i];
-            node = node.next;
-        }
+        items = Arrays.copyOf(items, bufferSize);
     }
 }

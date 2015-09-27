@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="DequeTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2015-09-27T02:13:45" hostname="dev" time="0.035">
+<testsuite name="DequeTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2015-09-27T04:23:30" hostname="dev" time="0.032">
   <properties/>
-  <testcase name="testSizeAfterRemovingLast" classname="DequeTest" time="0.002"/>
-  <testcase name="testAddFirstNullItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testSizeAfterRemovingLast" classname="DequeTest" time="0.006"/>
+  <testcase name="testAddFirstNullItems" classname="DequeTest" time="0.001"/>
   <testcase name="testSizeAfterRemovingFirst" classname="DequeTest" time="0.0"/>
   <testcase name="testAddLast" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddLastOrder" classname="DequeTest" time="0.0"/>
-  <testcase name="testIteratorRemove" classname="DequeTest" time="0.003"/>
-  <testcase name="testSize" classname="DequeTest" time="0.002"/>
+  <testcase name="testAddLastOrder" classname="DequeTest" time="0.001"/>
+  <testcase name="testIteratorRemove" classname="DequeTest" time="0.001"/>
+  <testcase name="testSize" classname="DequeTest" time="0.001"/>
   <testcase name="testIteratorNextWithNoItems" classname="DequeTest" time="0.001"/>
   <testcase name="testRemoveFirst" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddFirst" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirst" classname="DequeTest" time="0.002"/>
   <testcase name="testRemoveFirstWithNoItems" classname="DequeTest" time="0.001"/>
   <testcase name="testRemoveLastWithNoItems" classname="DequeTest" time="0.0"/>
   <testcase name="testAddLastAndAddFirst" classname="DequeTest" time="0.001"/>
-  <testcase name="testMixingAddAndRemove" classname="DequeTest" time="0.002"/>
-  <testcase name="testIsEmptyWithItems" classname="DequeTest" time="0.001"/>
-  <testcase name="testRemoveLast" classname="DequeTest" time="0.001"/>
+  <testcase name="testMixingAddAndRemove" classname="DequeTest" time="0.001"/>
+  <testcase name="testIsEmptyWithItems" classname="DequeTest" time="0.0"/>
+  <testcase name="testRemoveLast" classname="DequeTest" time="0.002"/>
   <testcase name="lastAddLastNullItems" classname="DequeTest" time="0.0"/>
   <testcase name="testIsEmpty" classname="DequeTest" time="0.0"/>
   <testcase name="testAddFirstOrder" classname="DequeTest" time="0.0"/>
   <testcase name="testIterator" classname="DequeTest" time="0.0"/>
-  <testcase name="testAddFirstAndAddLast" classname="DequeTest" time="0.001"/>
+  <testcase name="testAddFirstAndAddLast" classname="DequeTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

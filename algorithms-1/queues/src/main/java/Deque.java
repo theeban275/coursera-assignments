@@ -22,7 +22,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public Item next() {
-            if (current == null) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
 
