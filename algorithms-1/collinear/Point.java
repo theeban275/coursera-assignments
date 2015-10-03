@@ -13,7 +13,7 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class Point implements Comparable<Point> {
 
-    public class SlopeComparator implements Comparator<Point> {
+    private class SlopeComparator implements Comparator<Point> {
 
         public int compare(Point p, Point q) {
             double sp = slopeTo(p);
