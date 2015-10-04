@@ -1,8 +1,8 @@
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 import java.util.ArrayList;
 import java.util.Arrays;
-import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
 
 public class BruteCollinearPoints {
 
@@ -14,9 +14,9 @@ public class BruteCollinearPoints {
         if (points == null) {
             throw new NullPointerException();
         }
-
-        raiseExceptionIfAnyPointNull(points);
-        raiseExceptionIfAnyPointRepeated(points);
+        if (points.length == 0) {
+            return;
+        }
 
         computeSegments(points);
     }
@@ -74,57 +74,52 @@ public class BruteCollinearPoints {
     }
 
     private void raiseExceptionIfAnyPointRepeated(Point[] points) {
-        for (int i = 0; i < points.length; i++) {
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[i].compareTo(points[j]) == 0) {
-                    throw new IllegalArgumentException();
-                }
+        Point lastPoint  = points[0];
+        for (int i = 1; i < points.length; i++) {
+            Point point = points[i];
+            if (point.compareTo(lastPoint) == 0) {
+                throw new IllegalArgumentException();
             }
+            lastPoint = point;
         }
     }
 
     private void computeSegments(Point[] points) {
+        Point[] newPoints = Arrays.copyOf(points, points.length);
+        Arrays.sort(newPoints);
+        raiseExceptionIfAnyPointNull(newPoints);
+        raiseExceptionIfAnyPointRepeated(newPoints);
+
         segments = new ArrayList<LineSegment>();
-
-        int length = points.length - COLLINEAR_SIZE;
+        int length = newPoints.length - COLLINEAR_SIZE;
         for (int i = 0; i < length; i++) {
-            Point p = points[i];
+            Point p = newPoints[i];
 
-            for (int j = i + 1; j < points.length; j++) {
-                Point q = points[j];
+            for (int j = i + 1; j < newPoints.length; j++) {
+                Point q = newPoints[j];
                 double slopePQ = p.slopeTo(q);
 
-                for (int k = j + 1; k < points.length; k++) {
-                    Point r = points[k];
+                for (int k = j + 1; k < newPoints.length; k++) {
+                    Point r = newPoints[k];
                     double slopePR = p.slopeTo(r);
 
                     if (slopePQ != slopePR) {
                         continue;
                     }
 
-                    for (int l = k + 1; l < points.length; l++) {
-                        Point s = points[l];
+                    for (int l = k + 1; l < newPoints.length; l++) {
+                        Point s = newPoints[l];
                         double slopePS = p.slopeTo(s);
 
                         if (slopePQ != slopePS) {
                             continue;
                         }
 
-                        segments.add(createLineSegment(p, q, r, s));
+                        segments.add(new LineSegment(p, s));
                     }
                 }
             }
         }
-    }
-
-    private LineSegment createLineSegment(Point p, Point q, Point r, Point s) {
-        Point[] points = (Point[]) new Point[4];
-        points[0] = p;
-        points[1] = q;
-        points[2] = r;
-        points[3] = s;
-        Arrays.sort(points);
-        return new LineSegment(points[0], points[3]);
     }
 
 }

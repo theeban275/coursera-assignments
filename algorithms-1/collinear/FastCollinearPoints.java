@@ -1,20 +1,24 @@
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class FastCollinearPoints {
 
     private static final int COLLINEAR_SIZE = 3;
 
     private ArrayList<LineSegment> segments;
-    private ArrayList<Point> segmentStartPoints;
 
     public FastCollinearPoints(Point[] points) {
         if (points == null) {
             throw new NullPointerException();
+        }
+        if (points.length == 0) {
+            return;
         }
 
         raiseExceptionIfAnyPointNull(points);
@@ -76,39 +80,50 @@ public class FastCollinearPoints {
     }
 
     private void raiseExceptionIfAnyPointRepeated(Point[] points) {
-        for (int i = 0; i < points.length; i++) {
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[i].compareTo(points[j]) == 0) {
-                    throw new IllegalArgumentException();
-                }
+        Point lastPoint  = points[0];
+        for (int i = 1; i < points.length; i++) {
+            Point point = points[i];
+            if (point.compareTo(lastPoint) == 0) {
+                throw new IllegalArgumentException();
             }
+            lastPoint = point;
         }
     }
 
     private void computeSegments(Point[] points) {
+        Point[] newPoints = Arrays.copyOf(points, points.length);
+        Arrays.sort(newPoints);
+        raiseExceptionIfAnyPointNull(newPoints);
+        raiseExceptionIfAnyPointRepeated(newPoints);
+
         segments = new ArrayList<LineSegment>();
-        segmentStartPoints = new ArrayList<Point>();
-
-        int length = points.length - COLLINEAR_SIZE;
+        HashMap<Double, ArrayList<Point>> segmentSlopes = new HashMap<Double, ArrayList<Point>>();
+        int length = newPoints.length - COLLINEAR_SIZE;
         for (int i = 0; i < length; i++) {
-            Point p = points[i];
-            Arrays.sort(points, i + 1, points.length, p.slopeOrder());
+            Point p = newPoints[i];
+            Arrays.sort(newPoints, i + 1, newPoints.length, p.slopeOrder());
 
+            Point minp = p;
+            Point maxp = p;
+            int slopeEqualCount = 0;
+            double slopePX = Double.NEGATIVE_INFINITY;
             ArrayList<Point> collinearPoints = new ArrayList<Point>();
-            collinearPoints.add(p);
-            collinearPoints.add(points[i + 1]);
-            double slopePX = p.slopeTo(points[i + 1]);
-            for (int j = i + 2; j < points.length; j++) {
-                Point q = points[j];
-
+            for (int j = i + 1; j < newPoints.length; j++) {
+                Point q = newPoints[j];
                 double slopePQ = p.slopeTo(q);
                 if (slopePQ == slopePX) {
+                    minp = minPoint(minp, q);
+                    maxp = maxPoint(maxp, q);
+                    slopeEqualCount++;
                     collinearPoints.add(q);
                 } else {
-                    if (collinearPoints.size() > COLLINEAR_SIZE) {
-                        addLineSegment(collinearPoints);
+                    if (slopeEqualCount >= COLLINEAR_SIZE) {
+                        addLineSegment(segmentSlopes, slopePX, minp, maxp, collinearPoints);
                     }
 
+                    minp = minPoint(p, q);
+                    maxp = maxPoint(p, q);
+                    slopeEqualCount = 1;
                     slopePX = slopePQ;
                     collinearPoints.clear();
                     collinearPoints.add(p);
@@ -116,28 +131,40 @@ public class FastCollinearPoints {
                 }
             }
 
-            if (collinearPoints.size() > COLLINEAR_SIZE) {
-                addLineSegment(collinearPoints);
+            if (slopeEqualCount >= COLLINEAR_SIZE) {
+                addLineSegment(segmentSlopes, slopePX, minp, maxp, collinearPoints);
             }
         }
     }
 
-    private void addLineSegment(ArrayList<Point> points) {
-        Collections.sort(points);
-        LineSegment segment = new LineSegment(points.get(0), points.get(points.size() - 1));
-        if (!hasSegmentStartPoint(points.get(0))) {
-            segments.add(segment);
-            segmentStartPoints.add(points.get(0));
+    private void addLineSegment(HashMap<Double, ArrayList<Point>> segmentSlopes, Double slope, Point minp, Point maxp, ArrayList<Point> collinearPoints) {
+        if (segmentSlopes.get(slope) != null) {
+            ArrayList<Point> points = segmentSlopes.get(slope);
+            if (points.contains(minp) || points.contains(maxp)) {
+                return;
+            } else {
+                points.addAll(collinearPoints);
+            }
+        } else {
+            ArrayList<Point> points = new ArrayList<Point>();
+            points.addAll(collinearPoints);
+            segmentSlopes.put(slope, points);
         }
+        segments.add(new LineSegment(minp, maxp));
     }
 
-    private boolean hasSegmentStartPoint(Point p) {
-        for (int i = 0; i < segmentStartPoints.size(); i++) {
-            if (segmentStartPoints.get(i).compareTo(p) == 0) {
-                return true;
-            }
+    private Point minPoint(Point p, Point q) {
+        if (p.compareTo(q) < 0) {
+            return p;
         }
-        return false;
+        return q;
+    }
+
+    private Point maxPoint(Point p, Point q) {
+        if (p.compareTo(q) > 0) {
+            return p;
+        }
+        return q;
     }
 
 }
