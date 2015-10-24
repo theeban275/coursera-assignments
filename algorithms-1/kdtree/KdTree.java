@@ -98,10 +98,10 @@ public class KdTree {
     }
 
     public void draw() {
-        draw(root, 1);
+        draw(root, new RectHV(0, 0, 1, 1), 1);
     }
 
-    private void draw(Node node, int level) {
+    private void draw(Node node, RectHV rect, int level) {
         if (node == null) {
             return;
         }
@@ -110,16 +110,17 @@ public class KdTree {
 
         if (isEven(level)) {
             StdDraw.setPenColor(StdDraw.BLUE);
-            StdDraw.line(0, node.point.y(), 1, node.point.y());
+            StdDraw.line(rect.xmin(), node.point.y(), rect.xmax(), node.point.y());
             StdDraw.setPenColor();
+            draw(node.left, new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), node.point.y()), level + 1);
+            draw(node.right, new RectHV(rect.xmin(), node.point.y(), rect.xmax(), rect.ymax()), level + 1);
         } else {
             StdDraw.setPenColor(StdDraw.RED);
-            StdDraw.line(node.point.x(), 0, node.point.x(), 1);
+            StdDraw.line(node.point.x(), rect.ymin(), node.point.x(), rect.ymax());
             StdDraw.setPenColor();
+            draw(node.left, new RectHV(rect.xmin(), rect.ymin(), node.point.x(), rect.ymax()), level + 1);
+            draw(node.right, new RectHV(node.point.x(), rect.ymin(), rect.xmax(), rect.ymax()), level + 1);
         }
-
-        draw(node.left, level + 1);
-        draw(node.right, level + 1);
     }
 
     public Iterable<Point2D> range(RectHV rect) {
