@@ -49,13 +49,13 @@ public class KdTree {
         }
 
         if (isEven(level)) {
-            if (point.y() < node.point.y()) {
+            if (Double.compare(point.y(), node.point.y()) < 0) {
                 node.left = insert(node.left, point, level + 1);
             } else {
                 node.right = insert(node.right, point, level + 1);
             }
         } else {
-            if (point.x() < node.point.x()) {
+            if (Double.compare(point.x(), node.point.x()) < 0) {
                 node.left = insert(node.left, point, level + 1);
             } else {
                 node.right = insert(node.right, point, level + 1);
@@ -83,13 +83,13 @@ public class KdTree {
         }
 
         if (isEven(level)) {
-            if (point.y() < node.point.y()) {
+            if (Double.compare(point.y(), node.point.y()) < 0) {
                 return contains(node.left, point, level + 1);
             } else {
                 return contains(node.right, point, level + 1);
             }
         } else {
-            if (point.x() < node.point.x()) {
+            if (Double.compare(point.x(), node.point.x()) < 0) {
                 return contains(node.left, point, level + 1);
             } else {
                 return contains(node.right, point, level + 1);
@@ -140,17 +140,17 @@ public class KdTree {
         }
 
         if (isEven(level)) {
-            if (rect.ymin() < node.point.y()) {
+            if (Double.compare(rect.ymin(), node.point.y()) < 0) {
                 range(node.left, rect, level + 1, rangePoints);
             }
-            if (rect.ymax() >= node.point.y()) {
+            if (Double.compare(rect.ymax(), node.point.y()) >= 0) {
                 range(node.right, rect, level + 1, rangePoints);
             }
         } else {
-            if (rect.xmin() < node.point.x()) {
+            if (Double.compare(rect.xmin(), node.point.x()) < 0) {
                 range(node.left, rect, level + 1, rangePoints);
             }
-            if (rect.xmax() > node.point.x()) {
+            if (Double.compare(rect.xmax(), node.point.x()) >= 0) {
                 range(node.right, rect, level + 1, rangePoints);
             }
         }
@@ -170,7 +170,7 @@ public class KdTree {
 
         public void update(Point2D p) {
             double distance = point.distanceTo(p);
-            if (minPoint == null || distance < minDistance) {
+            if (minPoint == null || Double.compare(distance, minDistance) < 0) {
                 minDistance = distance;
                 minPoint = p;
             }
@@ -196,26 +196,26 @@ public class KdTree {
         // check the half that contains point and other half if the rect is closer than the current min distance
         Point2D point = queryPoint.point;
         if (isEven(level)) {
-            if (point.y() < node.point.y()) {
+            if (Double.compare(point.y(), node.point.y()) < 0) {
                 nearest(node.left, queryPoint, level + 1);
-                if (point.distanceTo(new Point2D(point.x(), node.point.y())) < queryPoint.minDistance) {
+                if (Double.compare(point.distanceTo(new Point2D(point.x(), node.point.y())), queryPoint.minDistance) < 0) {
                     nearest(node.right, queryPoint, level + 1);
                 }
             } else {
                 nearest(node.right, queryPoint, level + 1);
-                if (point.distanceTo(new Point2D(point.x(), node.point.y())) < queryPoint.minDistance) {
+                if (Double.compare(point.distanceTo(new Point2D(point.x(), node.point.y())), queryPoint.minDistance) < 0) {
                     nearest(node.left, queryPoint, level + 1);
                 }
             }
         } else {
-            if (point.x() < node.point.x()) {
+            if (Double.compare(point.x(), node.point.x()) < 0) {
                 nearest(node.left, queryPoint, level + 1);
-                if (point.distanceTo(new Point2D(node.point.x(), point.y())) < queryPoint.minDistance) {
+                if (Double.compare(point.distanceTo(new Point2D(node.point.x(), point.y())), queryPoint.minDistance) < 0) {
                     nearest(node.right, queryPoint, level + 1);
                 }
             } else {
                 nearest(node.right, queryPoint, level + 1);
-                if (point.distanceTo(new Point2D(node.point.x(), point.y())) < queryPoint.minDistance) {
+                if (Double.compare(point.distanceTo(new Point2D(node.point.x(), point.y())), queryPoint.minDistance) < 0) {
                     nearest(node.left, queryPoint, level + 1);
                 }
             }

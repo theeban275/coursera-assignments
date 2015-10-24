@@ -60,7 +60,7 @@ public class PointSET {
         Point2D minPoint = null;
         for (Point2D p : points) {
             double distance = point.distanceTo(p);
-            if (distance < minDistance) {
+            if (Double.compare(distance, minDistance) < 0) {
                 minDistance = distance;
                 minPoint = p;
             }
