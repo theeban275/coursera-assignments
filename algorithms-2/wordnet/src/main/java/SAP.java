@@ -5,7 +5,7 @@ public class SAP {
     private Digraph graph;
 
     public SAP(Digraph graph) {
-        this.graph = graph;
+        this.graph = new Digraph(graph);
     }
 
     public int length(int v, int w) {
