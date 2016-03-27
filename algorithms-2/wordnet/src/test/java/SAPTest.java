@@ -17,8 +17,8 @@ public class SAPTest {
         int length = sap.length(3, 11);
 
         // then
-        assertEquals(ancestor, 1);
-        assertEquals(length, 4);
+        assertEquals(1, ancestor);
+        assertEquals(4, length);
     }
 
     @Test
@@ -31,8 +31,8 @@ public class SAPTest {
         int length = sap.length(3, 3);
 
         // then
-        assertEquals(ancestor, 3);
-        assertEquals(length, 0);
+        assertEquals(3, ancestor);
+        assertEquals(0, length);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class SAPTest {
         int length = sap.length(3, 1);
 
         // then
-        assertEquals(ancestor, 1);
-        assertEquals(length, 1);
+        assertEquals(1, ancestor);
+        assertEquals(1, length);
     }
 
     @Test
@@ -59,8 +59,8 @@ public class SAPTest {
         int length = sap.length(3, 6);
 
         // then
-        assertEquals(ancestor, -1);
-        assertEquals(length, -1);
+        assertEquals(-1, ancestor);
+        assertEquals(-1, length);
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
@@ -81,8 +81,25 @@ public class SAPTest {
         sap.length(3, -1);
     }
 
+    @Test
+    public void testSapMultiplePaths() {
+        // given
+        SAP sap = new SAP(digraph("digraph2"));
+
+        // when
+        int ancestor = sap.ancestor(1, 5);
+        int length = sap.length(1, 5);
+
+        // then
+        assertEquals(0, ancestor);
+        assertEquals(2, length);
+    }
+
     private Digraph digraph() {
         return new Digraph(new In("src/test/resources/wordnet/digraph1.txt"));
     }
 
+    private Digraph digraph(String name) {
+        return new Digraph(new In("src/test/resources/wordnet/" + name + ".txt"));
+    }
 }
