@@ -107,16 +107,15 @@ public class WordNet {
     }
 
     private void checkRootedDag(Digraph digraph) {
-        boolean hasOneVertexWithOutDegreeZero = false;
+        int rootCount = 0;
         for (int i = 0; i < digraph.V(); i++) {
             if (digraph.outdegree(i) == 0) {
-                hasOneVertexWithOutDegreeZero = true;
-                break;
+                rootCount++;
             }
         }
-
-        if (!hasOneVertexWithOutDegreeZero) {
+        if (rootCount > 1) {
             throw new IllegalArgumentException("not rooted dag");
         }
     }
+
 }
