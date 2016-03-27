@@ -25,6 +25,7 @@ public class WordNet {
     private final ArrayList<Synset> synsets;
     private final HashMap<String, ArrayList<Synset>> nounsToSynsets;
     private final Digraph digraph;
+    private final SAP sap;
 
     public WordNet(String synsetsFilename, String hypernymsFilename) {
         In synsetsIn = new In(synsetsFilename);
@@ -53,6 +54,10 @@ public class WordNet {
                 digraph.addEdge(synsetId, Integer.parseInt(parts[i]));
             }
         }
+
+        checkRootedDag(digraph);
+
+        sap = new SAP(digraph);
     }
 
     public Iterable<String> nouns() {
@@ -67,13 +72,13 @@ public class WordNet {
     public int distance(String nounA, String nounB) {
         checkNoun(nounA);
         checkNoun(nounB);
-        return new SAP(digraph).length(synsetIdsForNoun(nounA), synsetIdsForNoun(nounB));
+        return sap.length(synsetIdsForNoun(nounA), synsetIdsForNoun(nounB));
     }
 
     public String sap(String nounA, String nounB) {
         checkNoun(nounA);
         checkNoun(nounB);
-        return synsetForId(new SAP(digraph).ancestor(synsetIdsForNoun(nounA), synsetIdsForNoun(nounB)));
+        return synsetForId(sap.ancestor(synsetIdsForNoun(nounA), synsetIdsForNoun(nounB)));
     }
 
     private Iterable<Integer> synsetIdsForNoun(String noun) {
@@ -101,4 +106,17 @@ public class WordNet {
         }
     }
 
+    private void checkRootedDag(Digraph digraph) {
+        boolean hasOneVertexWithOutDegreeZero = false;
+        for (int i = 0; i < digraph.V(); i++) {
+            if (digraph.outdegree(i) == 0) {
+                hasOneVertexWithOutDegreeZero = true;
+                break;
+            }
+        }
+
+        if (!hasOneVertexWithOutDegreeZero) {
+            throw new IllegalArgumentException("not rooted dag");
+        }
+    }
 }
