@@ -113,7 +113,8 @@ public class WordNet {
                 rootCount++;
             }
         }
-        if (rootCount > 1) {
+        boolean hasCycle = new DirectedCycle(digraph).hasCycle();
+        if (rootCount > 1 || hasCycle) {
             throw new IllegalArgumentException("not rooted dag");
         }
     }
