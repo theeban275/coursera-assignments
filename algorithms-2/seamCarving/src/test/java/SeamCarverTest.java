@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Picture;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class SeamCarverTest {
@@ -95,6 +96,36 @@ public class SeamCarverTest {
         testEnergyOfPicture(picture, picturePoints);
     }
 
+    @Test
+    public void testVerticalSeamPath3x4Picture() {
+        PicturePoint[][] picturePoints = getPicturePoints("3x4.printseams.txt", 3, 4);
+        SeamCarver seamCarver = getSeamCarver(getPicture("3x4.png"));
+        assertArrayEquals(getVerticalSeamPath(picturePoints), seamCarver.findVerticalSeam());
+    }
+
+    @Test
+    public void testHorizontalSeamPath3x4Picture() {
+        PicturePoint[][] picturePoints = getPicturePoints("3x4.printseams.txt", 3, 4);
+        SeamCarver seamCarver = getSeamCarver(getPicture("3x4.png"));
+        assertArrayEquals(getHorizontalSeamPath(picturePoints), seamCarver.findHorizontalSeam());
+    }
+
+    @Test
+    public void testRemoveHorizontalSeam() {
+        SeamCarver seamCarver = getSeamCarver(getPicture(3, 3));
+        seamCarver.removeHorizontalSeam(new int[] { 0, 1, 2 });
+        assertEquals(3, seamCarver.width());
+        assertEquals(2, seamCarver.height());
+    }
+
+    @Test
+    public void testRemoveVerticalSeam() {
+        SeamCarver seamCarver = getSeamCarver(getPicture(3, 3));
+        seamCarver.removeVerticalSeam(new int[] { 0, 1, 2 });
+        assertEquals(2, seamCarver.width());
+        assertEquals(3, seamCarver.height());
+    }
+
     private void testEnergyOfPicture(Picture picture, PicturePoint[][] picturePoints) {
         SeamCarver seamCarver = getSeamCarver(picture);
         for (int row = 0; row < picturePoints.length; row++) {
@@ -103,6 +134,32 @@ public class SeamCarverTest {
                 assertEquals(points[col].energy, seamCarver.energy(col, row), 0.01);
             }
         }
+    }
+
+    private int[] getVerticalSeamPath(PicturePoint[][] picturePoints) {
+        int[] path = new int[picturePoints.length];
+        for (int row = 0; row < picturePoints.length; row++) {
+            PicturePoint[] points = picturePoints[row];
+            for (int col = 0; col < points.length; col++) {
+                if (points[col].isMinVertical) {
+                    path[row] = col;
+                }
+            }
+        }
+        return path;
+    }
+
+    private int[] getHorizontalSeamPath(PicturePoint[][] picturePoints) {
+        int[] path = new int[picturePoints[0].length];
+        for (int row = 0; row < picturePoints.length; row++) {
+            PicturePoint[] points = picturePoints[row];
+            for (int col = 0; col < points.length; col++) {
+                if (points[col].isMinHorizontal) {
+                    path[col] = row;
+                }
+            }
+        }
+        return path;
     }
 
     private void testIllegalEnergyRange(int x, int y) {
@@ -169,8 +226,11 @@ public class SeamCarverTest {
                 points[i].energy = Double.parseDouble(pointEnergy.replace("*", ""));
             }
 
-            points[i].isMinVertical = isMin && isVertical;
-            points[i].isMinHorizontal = isMin && isVertical;
+            if (isVertical) {
+                points[i].isMinVertical = isMin;
+            } else {
+                points[i].isMinHorizontal = isMin;
+            }
         }
     }
 
