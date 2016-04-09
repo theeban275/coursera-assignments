@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.*;
 
+import java.awt.*;
+
 class SeamCarver {
 
     private final Picture picture;
@@ -23,7 +25,26 @@ class SeamCarver {
 
     public double energy(int x, int y) {
         checkCoordsInBounds(x, y, width(), height());
-        return 0.0;
+
+        if (x == 0 || y == 0 || x == width() - 1 || y == height() - 1) {
+            return 1000.00;
+        }
+
+        double deltaX = computeEnergyDelta(picture.get(x + 1, y), picture.get(x - 1, y));
+        double deltaY = computeEnergyDelta(picture.get(x, y + 1), picture.get(x, y - 1));
+
+        return Math.sqrt(deltaX + deltaY);
+    }
+
+    private double computeEnergyDelta(Color color1, Color color2) {
+        float[] rgb1 = color1.getRGBColorComponents(null);
+        float[] rgb2 = color2.getRGBColorComponents(null);
+        double delta = 0;
+        for (int i = 0; i < 3; i++) {
+            double diff = (rgb1[i] - rgb2[i]) * 255;
+            delta += diff * diff;
+        }
+        return delta;
     }
 
     public int[] findHorizontalSeam() {
