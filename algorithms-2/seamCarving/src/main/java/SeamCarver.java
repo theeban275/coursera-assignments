@@ -185,51 +185,28 @@ public class SeamCarver {
         }
     }
 
-    private final Picture picture;
-    private int width;
-    private int height;
-    private boolean[] discarded;
+    private Picture picture;
 
     public SeamCarver(Picture picture) {
         checkNotNull(picture);
 
         this.picture = new Picture(picture);
-        this.width = picture.width();
-        this.height = picture.height();
-        this.discarded = new boolean[width * height];
     }
 
     public Picture picture() {
-        Picture picture = new Picture(width, height);
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                picture.set(col, row, color(col, row));
-            }
-        }
-        return picture;
+        return new Picture(picture);
     }
 
     public int width() {
-        return width;
+        return picture.width();
     }
 
     public int height() {
-        return height;
+        return picture.height();
     }
 
     private Color color(int col, int row) {
-        while (discarded(col, row)) {
-            col++;
-        }
         return picture.get(col, row);
-    }
-
-    private boolean discarded(int col, int row) {
-        return discarded[col + row * width()];
-    }
-
-    private void setDiscarded(int col, int row, boolean value) {
-        discarded[col + row * width()] = value;
     }
 
     public double energy(int x, int y) {
@@ -246,11 +223,11 @@ public class SeamCarver {
     }
 
     private double computeEnergyDelta(Color color1, Color color2) {
-        float[] rgb1 = color1.getRGBColorComponents(null);
-        float[] rgb2 = color2.getRGBColorComponents(null);
+        int[] rgb1 = new int[] { color1.getRed(), color1.getGreen(), color1.getBlue() };
+        int[] rgb2 = new int[] { color2.getRed(), color2.getGreen(), color2.getBlue() };
         double delta = 0;
         for (int i = 0; i < 3; i++) {
-            double diff = (rgb1[i] - rgb2[i]) * 255;
+            double diff = rgb1[i] - rgb2[i];
             delta += diff * diff;
         }
         return delta;
@@ -285,32 +262,46 @@ public class SeamCarver {
 
     public void removeHorizontalSeam(int[] seam) {
         checkNotNull(seam);
-        checkValidSeam(seam, height());
+        checkValidSeam(seam, width(), height());
         if (height() <= 1) {
             throw new IllegalArgumentException("cannot remove horizontal seam for picture with only 1 pixel height");
         }
 
-        for (int i = 0; i < seam.length; i++) {
-            int row = seam[i];
-            setDiscarded(i, row, true);
+        Picture picture = new Picture(width(), height() - 1);
+        for (int col = 0; col < picture.width(); col++) {
+            int seamRow = seam[col];
+            for (int row = 0; row < picture.height(); row++) {
+                if (row < seamRow) {
+                    picture.set(col, row, color(col, row));
+                } else {
+                    picture.set(col, row, color(col, row + 1));
+                }
+            }
         }
 
-        height--;
+        this.picture = picture;
     }
 
     public void removeVerticalSeam(int[] seam) {
         checkNotNull(seam);
-        checkValidSeam(seam, width());
+        checkValidSeam(seam, height(), width());
         if (width() <= 1) {
             throw new IllegalArgumentException("cannot remove vertical seam for picture with only 1 pixel width");
         }
 
-        for (int i = 0; i < seam.length; i++) {
-            int col = seam[i];
-            setDiscarded(col, i, true);
+        Picture picture = new Picture(width() - 1, height());
+        for (int row = 0; row < picture.height(); row++) {
+            int seamCol = seam[row];
+            for (int col = 0; col < picture.width(); col++) {
+                if (col < seamCol) {
+                    picture.set(col, row, color(col, row));
+                } else {
+                    picture.set(col, row, color(col + 1, row));
+                }
+            }
         }
 
-        width--;
+        this.picture = picture;
     }
 
     private void checkNotNull(Object o) {
@@ -321,20 +312,23 @@ public class SeamCarver {
 
     private void checkPointInBounds(int x, int y, int w, int h) {
         if (x < 0 || x >= w || y < 0 || y >= h) {
-            throw new IllegalArgumentException("(" + x + "," + y + ") is out of range");
+            throw new IndexOutOfBoundsException("(" + x + "," + y + ") is out of range");
         }
     }
 
-    private void checkValidSeam(int[] seam, int maxLength) {
-        if (seam.length > maxLength) {
-            throw new IllegalArgumentException("seam length is more than max allowed");
+    private void checkValidSeam(int[] seam, int length, int maxValue) {
+        if (seam.length != length) {
+            throw new IllegalArgumentException("seam length " + seam.length + " is not equal to " + length);
         }
+
         for (int i = 0; i < seam.length; i++) {
-            if (seam[i] < 0 || seam[i] >= maxLength) {
-                throw new IllegalArgumentException("seam value " + seam[i] + " is out of bounds");
+            if (seam[i] < 0 || seam[i] >= maxValue) {
+                throw new IllegalArgumentException("seam value " + seam[i] + " is out of bounds (0, " + maxValue + ")");
             }
+
             if (i == 0) continue;
-            if (seam[i] - seam[i-1] != 1) {
+
+            if (Math.abs(seam[i] - seam[i-1]) > 1) {
                 throw new IllegalArgumentException("seam at index " + i + " differs from previous seam value by more than 1");
             }
         }
