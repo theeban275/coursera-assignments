@@ -13,12 +13,15 @@ public class BaseballElimination {
 
     public BaseballElimination(String filename) {
         In in = new In(filename);
+
         numberOfTeams = in.readInt();
+
         teams = new ArrayList<String>();
         wins = new int[numberOfTeams];
         losses = new int[numberOfTeams];
         remaining = new int[numberOfTeams];
         games = new int[numberOfTeams][numberOfTeams];
+
         for (int i = 0; i < numberOfTeams; i++) {
             teams.add(in.readString());
             wins[i] = in.readInt();
