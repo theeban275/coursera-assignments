@@ -153,7 +153,7 @@ public class BaseballElimination {
         return wins(teamNumber(team));
     }
 
-    public int wins(int teamNumber) {
+    private int wins(int teamNumber) {
         return wins[teamNumber];
     }
 
@@ -161,7 +161,7 @@ public class BaseballElimination {
         return losses(teamNumber(team));
     }
 
-    public int losses(int teamNumber) {
+    private int losses(int teamNumber) {
         return losses[teamNumber];
     }
 
@@ -169,7 +169,7 @@ public class BaseballElimination {
         return remaining(teamNumber(team));
     }
 
-    public int remaining(int teamNumber) {
+    private int remaining(int teamNumber) {
         return remaining[teamNumber];
     }
 
@@ -177,7 +177,7 @@ public class BaseballElimination {
         return against(teamNumber(team1), teamNumber(team2));
     }
 
-    public int against(int team1Number, int team2Number) {
+    private int against(int team1Number, int team2Number) {
         return games[team1Number][team2Number];
     }
 
