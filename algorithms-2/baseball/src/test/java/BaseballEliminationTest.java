@@ -187,6 +187,16 @@ public class BaseballEliminationTest {
       assertEquals(iterable("Atlanta"), baseballElimination.certificateOfElimination("Montreal"));
    }
 
+   @Test
+   public void testCertificateOfElimination_multipleTeamsNonTrivialElimination_extended() {
+      BaseballElimination baseballElimination = baseballElimination("teams5.txt");
+      assertEquals(null, baseballElimination.certificateOfElimination("New_York"));
+      assertEquals(null, baseballElimination.certificateOfElimination("Baltimore"));
+      assertEquals(null, baseballElimination.certificateOfElimination("Boston"));
+      assertEquals(null, baseballElimination.certificateOfElimination("Toronto"));
+      assertEquals(iterable("New_York", "Baltimore", "Boston", "Toronto"), baseballElimination.certificateOfElimination("Detroit"));
+   }
+
    @Test(expected = IllegalArgumentException.class)
    public void testCertificateOfElimination_invalidTeam() {
       baseballElimination("teams4.txt").certificateOfElimination("Something");

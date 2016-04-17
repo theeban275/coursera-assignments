@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.In;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class BaseballElimination {
 
@@ -234,7 +235,11 @@ public class BaseballElimination {
             for (int teamNumber : teamVerticesInFlow) {
                 teams.add(teamName(teamNumber));
             }
-            Collections.sort(teams);
+            Collections.sort(teams, new Comparator<String>() {
+                public int compare(String o1, String o2) {
+                    return teamNumber(o1) - teamNumber(o2);
+                }
+            });
         }
 
         return teams;
