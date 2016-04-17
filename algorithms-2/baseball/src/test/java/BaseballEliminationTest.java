@@ -1,6 +1,6 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
@@ -27,13 +27,7 @@ public class BaseballEliminationTest {
 
    @Test
    public void testTeams_multipleTeams() {
-      Iterator<String> teams = baseballElimination("teams4.txt").teams().iterator();
-      assertEquals(true, teams.hasNext());
-      assertEquals("Atlanta", teams.next());
-      assertEquals("Philadelphia", teams.next());
-      assertEquals("New_York", teams.next());
-      assertEquals("Montreal", teams.next());
-      assertEquals(false, teams.hasNext());
+      assertIterableEquals(iterable("Atlanta", "Philadelphia", "New_York", "Montreal"), baseballElimination("teams4.txt").teams());
    }
 
    @Test
@@ -129,7 +123,73 @@ public class BaseballEliminationTest {
 
    @Test(expected = IllegalArgumentException.class)
    public void testAgainst_secondTeamInvalid() {
-         baseballElimination("teams4.txt").against("Atlanta", "Something");
+     baseballElimination("teams4.txt").against("Atlanta", "Something");
+   }
+
+   @Test
+   public void testIsEliminated_singleTeam() {
+      assertEquals(false, baseballElimination().isEliminated("Turing"));
+   }
+
+   @Test
+   public void testIsEliminated_twoTeamsTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams2_trivial.txt");
+      assertEquals(false, baseballElimination.isEliminated("A"));
+      assertEquals(true, baseballElimination.isEliminated("B"));
+   }
+
+   @Test
+   public void testIsEliminated_twoTeamsNonTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams2_nontrivial.txt");
+      assertEquals(false, baseballElimination.isEliminated("A"));
+      assertEquals(false, baseballElimination.isEliminated("B"));
+   }
+
+   @Test
+   public void testIsEliminated_multipleTeamsNonTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams4.txt");
+      assertEquals(false, baseballElimination.isEliminated("Atlanta"));
+      assertEquals(true, baseballElimination.isEliminated("Philadelphia"));
+      assertEquals(false, baseballElimination.isEliminated("New_York"));
+      assertEquals(true, baseballElimination.isEliminated("Montreal"));
+   }
+
+   @Test(expected = IllegalArgumentException.class)
+   public void testIsEliminated_invalidTeam() {
+      baseballElimination("teams4.txt").isEliminated("Something");
+   }
+
+   @Test
+   public void testCertificateOfElimination_singleTeam() {
+      assertEquals(null, baseballElimination().certificateOfElimination("Turing"));
+   }
+
+   @Test
+   public void testCertificateOfElimination_twoTeamsTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams2_trivial.txt");
+      assertEquals(null, baseballElimination.certificateOfElimination("A"));
+      assertEquals(iterable("A"), baseballElimination.certificateOfElimination("B"));
+   }
+
+   @Test
+   public void testCertificateOfElimination_twoNonTeamsTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams2_nontrivial.txt");
+      assertEquals(null, baseballElimination.certificateOfElimination("A"));
+      assertEquals(null, baseballElimination.certificateOfElimination("B"));
+   }
+
+   @Test
+   public void testCertificateOfElimination_multipleTeamsNonTrivialElimination() {
+      BaseballElimination baseballElimination = baseballElimination("teams4.txt");
+      assertEquals(null, baseballElimination.certificateOfElimination("Atlanta"));
+      assertEquals(iterable("Atlanta", "New_York"), baseballElimination.certificateOfElimination("Philadelphia"));
+      assertEquals(null, baseballElimination.certificateOfElimination("New_York"));
+      assertEquals(iterable("Atlanta"), baseballElimination.certificateOfElimination("Montreal"));
+   }
+
+   @Test(expected = IllegalArgumentException.class)
+   public void testCertificateOfElimination_invalidTeam() {
+      baseballElimination("teams4.txt").certificateOfElimination("Something");
    }
 
    private BaseballElimination baseballElimination() {
@@ -138,6 +198,18 @@ public class BaseballEliminationTest {
 
    private BaseballElimination baseballElimination(String filename) {
       return new BaseballElimination("src/test/resources/baseball/" + filename);
+   }
+
+   private void assertIterableEquals(Iterable<String> expected, Iterable<String> actual) {
+      Iterator<String> it = actual.iterator();
+      for (String value : expected) {
+         assertEquals(value, it.next());
+      }
+      assertEquals(false, it.hasNext());
+   }
+
+   private Iterable<String> iterable(String... args) {
+      return Arrays.asList(args);
    }
 
 }
