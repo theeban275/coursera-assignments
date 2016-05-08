@@ -1,8 +1,6 @@
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
 
-import java.util.Arrays;
-
 public class BurrowsWheeler {
 
     private static class BurrowsWheelerEncoder {
@@ -33,60 +31,58 @@ public class BurrowsWheeler {
         }
     }
 
+    // NOTE: This is a modification of the LSD class from algs4.jar
     private static class BurrowsWheelerDecoder {
 
-        private String decoded;
+        private final char[] t;
+        private final char[] s;
+        private final int[] next;
 
-        private BurrowsWheelerDecoder(String s, int first) {
-            int length = s.length();
+        private final char[] decoded;
 
-            CharacterIndex[] characters = new CharacterIndex[length];
+        private BurrowsWheelerDecoder(String str, int first) {
+            int length = str.length();
+            t = str.toCharArray();
+            s = new char[length];
+            next = new int[length];
+            sort();
+
+            decoded = new char[length];
+            int nextIndex = first;
             for (int i = 0; i < length; i++) {
-               characters[i] = new CharacterIndex(s.charAt(i), i);
+                decoded[i] = s[nextIndex];
+                nextIndex = next[nextIndex];
             }
-            Arrays.sort(characters);
-
-            StringBuilder builder = new StringBuilder();
-            builder.append(characters[first].character());
-            int nextIndex = characters[first].index();
-            for (int i = 1; i < length; i++) {
-                builder.append(characters[nextIndex].character());
-                nextIndex = characters[nextIndex].index();
-            }
-
-            decoded = builder.toString();
         }
 
         private char decodeCharAt(int index) {
-            return decoded.charAt(index);
-        }
-    }
-
-    private static class CharacterIndex implements Comparable<CharacterIndex> {
-        private final char character;
-        private final int index;
-
-        private CharacterIndex(char character, int index) {
-            this.character = character;
-            this.index = index;
+            return decoded[index];
         }
 
-        private char character() {
-            return character;
-        }
+        private void sort() {
+            int N = t.length;
+            int R = 256;   // extend ASCII alphabet size
 
-        private int index() {
-            return index;
-        }
-
-        @Override
-        public int compareTo(CharacterIndex o) {
-            int diff = character() - o.character();
-            if (diff == 0) {
-                return index() - o.index();
+            // compute frequency counts
+            int[] count = new int[R+1];
+            for (int i = 0; i < N; i++) {
+                count[t[i] + 1]++;
             }
-            return diff;
+
+            // compute cumulates
+            for (int r = 0; r < R; r++) {
+                count[r+1] += count[r];
+            }
+
+            // move data
+            for (int i = 0; i < N; i++) {
+                int index = count[t[i]];
+                s[index] = t[i];
+                next[index] = i;
+                count[t[i]]++;
+            }
         }
+
     }
 
     public static void encode() {

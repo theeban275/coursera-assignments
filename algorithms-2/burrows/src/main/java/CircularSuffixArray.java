@@ -1,83 +1,105 @@
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.IntStream;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class CircularSuffixArray {
 
-    private static class CircularString implements CharSequence, Comparable<CircularString> {
+    // NOTE: This is a modification of the Quick3string class from algs4.jar
+    private class Quick3CircularSuffix {
+        private static final int CUTOFF =  15;   // cutoff to insertion sort
 
-        private final CharSequence sequence;
-        private final int offset;
+        private final String str;
 
-        public CircularString(CharSequence s, int offset) {
-            this.sequence = s;
-            this.offset = offset;
+        private Quick3CircularSuffix(String s) {
+            this.str = s;
         }
 
-        public int offset() {
-            return offset;
+        private void sort(int[] a) {
+            StdRandom.shuffle(a);
+            sort(a, 0, a.length-1, 0);
         }
 
-        @Override
-        public int length() {
-            return sequence.length();
+        // return the dth character of s, -1 if d = length of s
+        private int charAt(int offset, int d) {
+            if (d == length()) return -1;
+            return charAt(d + offset);
         }
 
-        @Override
-        public char charAt(int index) {
-            return sequence.charAt((index + offset) % length());
-        }
-
-        @Override
-        public CharSequence subSequence(int start, int end) {
-            return new CircularString(sequence.subSequence(start, end), offset);
-        }
-
-        @Override
-        public IntStream chars() {
-            return sequence.chars();
-        }
-
-        @Override
-        public IntStream codePoints() {
-            return sequence.codePoints();
-        }
-
-        @Override
-        public int compareTo(CircularString o) {
-            for (int i = 0; i < length() && i < o.length(); i++) {
-                if (charAt(i) < o.charAt(i)) {
-                    return -1;
-                } else if (charAt(i) > o.charAt(i)) {
-                    return 1;
-                }
+        // 3-way string quicksort a[lo..hi] starting at dth character
+        private void sort(int[] a, int lo, int hi, int d) {
+            // cutoff to insertion sort for small subarrays
+            if (hi <= lo + CUTOFF) {
+                insertion(a, lo, hi, d);
+                return;
             }
-            return length() - o.length();
+
+            int lt = lo, gt = hi;
+            int v = charAt(a[lo], d);
+            int i = lo + 1;
+            while (i <= gt) {
+                int t = charAt(a[i], d);
+                if      (t < v) exch(a, lt++, i++);
+                else if (t > v) exch(a, i, gt--);
+                else              i++;
+            }
+
+            // a[lo..lt-1] < v = a[lt..gt] < a[gt+1..hi].
+            sort(a, lo, lt-1, d);
+            if (v >= 0) sort(a, lt, gt, d+1);
+            sort(a, gt+1, hi, d);
         }
+
+        // sort from a[lo] to a[hi], starting at the dth character
+        private void insertion(int[] a, int lo, int hi, int d) {
+            for (int i = lo; i <= hi; i++)
+                for (int j = i; j > lo && less(a[j], a[j-1], d); j--)
+                    exch(a, j, j-1);
+        }
+
+        // exchange a[i] and a[j]
+        private void exch(int[] a, int i, int j) {
+            int temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
+
+        // is v less than w, starting at character d
+        private boolean less(int v, int w, int d) {
+            for (int i = d; i < length(); i++) {
+                if (charAt(i + v) < charAt(i + w)) return true;
+                if (charAt(i + v) > charAt(i + w)) return false;
+            }
+            return false;
+        }
+
+        private char charAt(int i) {
+            if (i >= length()) {
+                i -= length();
+            }
+            return str.charAt(i);
+        }
+
+        private int length() {
+            return str.length();
+        }
+
     }
 
-    private final CircularString[] suffixes;
+    private final int[] offsets;
 
     public CircularSuffixArray(String s) {
         if (s == null) {
             throw new NullPointerException("Argument is null");
         }
 
-        suffixes = new CircularString[s.length()];
+        offsets = new int[s.length()];
         for (int i = 0; i < s.length(); i++) {
-            suffixes[i] = new CircularString(s, i);
+            offsets[i] = i;
         }
 
-        Arrays.sort(suffixes, new Comparator<CircularString>() {
-            @Override
-            public int compare(CircularString o1, CircularString o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        new Quick3CircularSuffix(s).sort(offsets);
     }
 
     public int length() {
-        return suffixes.length;
+        return offsets.length;
     }
 
     public int index(int i) {
@@ -85,7 +107,7 @@ public class CircularSuffixArray {
            throw new IndexOutOfBoundsException("index " + i + " is out of bounds");
         }
 
-        return suffixes[i].offset();
+        return offsets[i];
     }
 
 }
