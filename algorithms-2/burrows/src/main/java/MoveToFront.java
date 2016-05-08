@@ -51,7 +51,7 @@ public class MoveToFront {
     public static void decode() {
         FrontCharMap charMap = new FrontCharMap();
         while (hasInput()) {
-            int index = readByte();
+            int index = readByte() & 0xff;
             char c = charMap.get(index);
             charMap.shift(index);
             writeByte((byte) c);
