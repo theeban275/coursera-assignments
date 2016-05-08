@@ -131,10 +131,6 @@ public class BurrowsWheeler {
         return !BinaryStdIn.isEmpty();
     }
 
-    private static int readByte() {
-        return BinaryStdIn.readByte();
-    }
-
     private static void writeByte(byte b) {
         BinaryStdOut.write(b);
     }
@@ -153,9 +149,9 @@ public class BurrowsWheeler {
 
     public static void main(String[] args) {
         String code = args.length > 0 ? args[0] : null;
-        if ("+".equals(code)) {
+        if ("-".equals(code)) {
             encode();
-        } else if ("-".equals(code)) {
+        } else if ("+".equals(code)) {
             decode();
         } else {
             System.out.println("Usage: java BurrowsWheeler (+|-) < filename");

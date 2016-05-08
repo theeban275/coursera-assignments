@@ -35,9 +35,9 @@ public class MoveToFrontTest {
 
     @Test
     public void testEncodeMultipleCharacters() {
-        stdin("ABC");
+        stdin("ABRACADABRA!");
         MoveToFront.encode();
-        assertEquals("41 42 43", hexout());
+        assertEquals("41 42 52 02 44 01 45 01 04 04 02 26", hexout());
     }
 
     @Test
@@ -70,9 +70,9 @@ public class MoveToFrontTest {
 
     @Test
     public void testDecodeMultipleCharacters() {
-        hexin("41 42 43");
+        hexin("41 42 52 02 44 01 45 01 04 04 02 26");
         MoveToFront.decode();
-        assertEquals("ABC", stdout());
+        assertEquals("ABRACADABRA!", stdout());
     }
 
     @Test
@@ -92,14 +92,14 @@ public class MoveToFrontTest {
     @Test
     public void testEncode() {
         stdin("ABC");
-        MoveToFront.main(new String[] { "+" });
+        MoveToFront.main(new String[] { "-" });
         assertEquals("41 42 43", hexout());
     }
 
     @Test
     public void testDecode() {
         hexin("41 42 43");
-        MoveToFront.main(new String[] { "-" });
+        MoveToFront.main(new String[] { "+" });
         assertEquals("ABC", stdout());
     }
 

@@ -78,14 +78,14 @@ public class BurrowsWheelerTest {
     @Test
     public void testEncode() {
         stdin("ABRACADABRA!");
-        BurrowsWheeler.main(new String[] { "+" });
+        BurrowsWheeler.main(new String[] { "-" });
         assertEquals("00 00 00 03 41 52 44 21 52 43 41 41 41 41 42 42", hexout());
     }
 
     @Test
     public void testDecode() {
         hexin("00 00 00 03 41 52 44 21 52 43 41 41 41 41 42 42");
-        BurrowsWheeler.main(new String[] { "-" });
+        BurrowsWheeler.main(new String[] { "+" });
         assertEquals("ABRACADABRA!", stdout());
     }
 
