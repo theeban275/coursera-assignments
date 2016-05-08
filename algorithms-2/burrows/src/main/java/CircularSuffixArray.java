@@ -25,7 +25,7 @@ public class CircularSuffixArray {
 
         @Override
         public char charAt(int index) {
-            return sequence.charAt(index + offset);
+            return sequence.charAt((index + offset) % length());
         }
 
         @Override
